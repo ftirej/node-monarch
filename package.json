@@ -1,0 +1,17 @@
+{
+  "name": "node-monarch",
+  "version": "1.0.0",
+  "description": "",
+  "main": "monarch.js",
+  "scripts": {
+    "start": "node monarch.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Gabrielstuff",
+  "license": "ISC",
+  "dependencies": {
+    "colors": "1.1.2",
+    "inquirer": "0.11.0",
+    "request": "2.67.0"
+  }
+}
