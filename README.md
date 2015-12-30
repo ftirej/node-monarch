@@ -16,14 +16,17 @@ http://www.matrox.com/video/media/pdf/support/monarch_hd/doc/en_Matrox_Monarch_H
 1. Install
 `npm install`
 
-2. configure by calling method setConfig (must be valid schema format): 
-	`schema = 
+2. configure by calling method setConfig (must be valid schema format):
+ 
+```
+	 schema = 
 	 {
             "username": {"type": "string"},
             "password": {"type": "string"},
             "ipAddress": {"type": "string"}
          },
-	 "required": ["username", "password", "ipAddress"]`
+	 "required": ["username", "password", "ipAddress"]
+```
 
 3. configure your option there :
 
@@ -38,9 +41,26 @@ options = {
 
 Configure a remote point for NFS, on Ubuntu `14.04` the good guide is here: https://help.ubuntu.com/14.04/serverguide/network-file-system.html
 
-4. And use by example: 
-	`var monarch = require('./node_modules/node-monarch/monarch')
-	 monarch.ask()`
+4. Usage example:
+ 
+```
+	var monarch = require('./node_modules/node-monarch/monarch')
+	monarch.ask()
+```
+
+5. Monarch Methods:
+
+```
+  	SetConfig
+  	getStatus
+  	startRecord
+  	stopRecord
+  	testCall
+  	runPermanentTest
+  	stopPermanenTest
+  	example
+```
+
 
 Make sure you are pointing to the right IP of you Matrox Monarch HD or HDX
 

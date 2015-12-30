@@ -128,7 +128,7 @@ var questions = [
   }
 ]
 
-var ask = function () {
+var example = function () {
   inquirer.prompt(questions, function (answers) {
     if (answers.command === 'Exit') {
       process.exit()
@@ -163,12 +163,12 @@ var ask = function () {
         default:
           console.log('Wtf ???')
       }
-      ask()
+      example()
     }
   })
 }
 //let's ask the user what he wants !
-//ask()
+//example()
 
 module.exports = {
   setConfig: setConfig,
@@ -178,5 +178,5 @@ module.exports = {
   testCall: testCall,
   runPermanentTest: runPermanentTest,
   stopPermanenTest: stopPermanenTest,
-  ask: ask
+  example: example
 };
