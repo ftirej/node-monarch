@@ -15,6 +15,27 @@ var encoderOptions = ['StartRecording', 'StartEncoder1', 'StartEncoder2', 'Start
 var stopOptions = ['StartRecording', 'StopEncoder1', 'StopEncoder2', 'StopBothEncoders']
 var permanentTest
 
+var setConfig = function (userConfig){
+    var fs = require('fs')
+    var Validator = require('jsonschema').Validator;
+    var v = new Validator();
+    var schema = {
+	"id": "/Config",
+	"type": "object",
+	"properties": {
+  	    "username": {"type": "string"},
+  	    "password": {"type": "string"},
+  	    "ipAddress": {"type": "string"}
+	},
+	"required": ["username", "password", "ipAddress"]
+    }
+    var errors = v.validate(userConfig, schema).errors
+        if (errors != "")
+	    console.log(errors)
+	else
+	    fs.writeFileSync("config/config.json", JSON.stringify(userConfig))
+}
+
 var getStatus = function () {
     var url = secureurl.replace('<command>', 'GetStatus')
     console.log(url)
@@ -150,6 +171,7 @@ var ask = function () {
 //ask()
 
 module.exports = {
+  setConfig: setConfig,
   getStatus: getStatus,
   startRecord: startRecord,
   stopRecord: stopRecord,

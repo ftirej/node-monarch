@@ -80,3 +80,6 @@ $RECYCLE.BIN/
 
 # KDE directory preferences
 .directory
+
+# Test File 
+test.js
