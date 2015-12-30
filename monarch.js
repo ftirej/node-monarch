@@ -1,15 +1,16 @@
 'use strict'
 
 var request = require('request')
+var extend = require('util')._extend
 
-var Monarch = function (userConfig) {
+var Monarch = function (userConfig, options) {
   this.configurl = 'http://<username>:<password>@<ipAddress>/Monarch/syncconnect/sdk.aspx?command=<command>'
-  this.options = {
+
+  this.options = extend({
     timeout: 3000,
-    permanentTestInterval: 30000,
     recordDuration: 15000,
     hdx: true
-  }
+  }, options)
   this.encoderOptions = ['StartRecording', 'StartEncoder1', 'StartEncoder2', 'StartBothEncoders']
   this.stopOptions = ['StartRecording', 'StopEncoder1', 'StopEncoder2', 'StopBothEncoders']
   this.secureurl
@@ -52,6 +53,11 @@ Monarch.prototype.getStatus = function () {
 }
 
 Monarch.prototype.startRecord = function (encodeIndex) {
+  if (encodeIndex === undefined && !this.options.hdx) {
+    encodeIndex = 0
+  } else if (encodeIndex === undefined && this.options.hdx) {
+    encodeIndex = 3
+  }
   if (encodeIndex < encoderOptions.length && encodeIndex > -1) {
     var url = this.secureurl.replace('<command>', encoderOptions[encodeIndex])
     console.log('Start record with:', url)
@@ -74,6 +80,11 @@ Monarch.prototype.startRecord = function (encodeIndex) {
 }
 
 Monarch.prototype.stopRecord = function (stopIndex) {
+  if (stopIndex === undefined && !this.options.hdx) {
+    encodeIndex = 0
+  } else if (stopIndex === undefined && this.options.hdx) {
+    encodeIndex = 3
+  }
   if (stopIndex < stopOptions.length && stopIndex > -1) {
     var url = this.secureurl.replace('<command>', stopOptions[stopIndex])
     console.log('Stop record with:', url)

@@ -1,7 +1,11 @@
 var inquirer = require('inquirer')
-var Monarch = require('../monarch');
-
-var options 
+var Monarch = require('../monarch')
+var permanentTestInterval = 30000
+var options = {
+    timeout: 3000,
+    recordDuration: 15000,
+    hdx: true
+}
 
 var config = require('./config/config.json')
 
@@ -23,7 +27,7 @@ var questions = [
 
 var permanentTest
 
-var monarch = new Monarch(config)
+var monarch = new Monarch(config, options)
 
 var testCall = function (optionIndex) {
     monarch.startRecord(optionIndex)
@@ -34,7 +38,7 @@ var runPermanentTest = function (optionsNumber) {
     clearInterval(permanentTest)
     permanentTest = setInterval(function () {
       testCall(optionsNumber)
-    }, monarch.options.permanentTestInterval)
+    }, permanentTestInterval)
   }
 
 var stopPermanenTest = function () {
@@ -69,7 +73,7 @@ var ask = function () {
           monarch.stopRecord(optionIndex)
           break
         case 'Run permanent test':
-          console.log('Run permanent test based on every ' + options.permanentTestInterval + 'ms')
+          console.log('Run permanent test based on every ' + permanentTestInterval + 'ms')
           runPermanentTest(optionIndex)
           break
         case 'Stop permanent test':
