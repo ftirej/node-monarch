@@ -1,10 +1,9 @@
 'use strict'
-var config = require('./config/config.json')
+var config = {}
 var configurl = 'http://<username>:<password>@<ipAddress>/Monarch/syncconnect/sdk.aspx?command=<command>'
 var secureurl = configurl.replace('<username>', config.username).replace('<password>', config.password).replace('<ipAddress>', config.ipAddress)
 var request = require('request')
 var colors = require('colors')
-var inquirer = require('inquirer')
 var options = {
     timeout: 3000,
     permanentTestInterval: 30000,
@@ -15,28 +14,27 @@ var encoderOptions = ['StartRecording', 'StartEncoder1', 'StartEncoder2', 'Start
 var stopOptions = ['StartRecording', 'StopEncoder1', 'StopEncoder2', 'StopBothEncoders']
 var permanentTest
 
-var setConfig = function (userConfig){
-    var fs = require('fs')
-    var Validator = require('jsonschema').Validator;
-    var v = new Validator();
-    var schema = {
-	"id": "/Config",
-	"type": "object",
-	"properties": {
-  	    "username": {"type": "string"},
-  	    "password": {"type": "string"},
-  	    "ipAddress": {"type": "string"}
-	},
-	"required": ["username", "password", "ipAddress"]
-    }
-    var errors = v.validate(userConfig, schema).errors
-        if (errors != "")
-	    console.log(errors)
-	else
-	    fs.writeFileSync("config/config.json", JSON.stringify(userConfig))
+var Monarch = function (userConfig){
+    
+    this.setConfig(userConfig)
 }
 
-var getStatus = function () {
+Monarch.prototype.setConfig = function(userConfig) {
+
+    this.config = userConfig
+    console.log(this.config)
+}
+
+Monarch.prototype.setOptions = function(options) {
+
+    this.options = options;
+}
+
+Monarch.prototype.getOptions = function() {
+    return this.options
+}
+
+Monarch.prototype.getStatus = function () {
     var url = secureurl.replace('<command>', 'GetStatus')
     console.log(url)
     request({
@@ -56,7 +54,7 @@ var getStatus = function () {
     })
   }
 
-var startRecord = function (encodeIndex) {
+Monarch.prototype.startRecord = function (encodeIndex) {
     if (encodeIndex < encoderOptions.length && encodeIndex > -1) {
       var url = secureurl.replace('<command>', encoderOptions[encodeIndex])
       console.log('Start record with:', url)
@@ -67,7 +65,7 @@ var startRecord = function (encodeIndex) {
         if (!error && response.statusCode == 200) {
           console.log('Recording: ' + body.green)
           setTimeout(function () {
-            stopRecord(encodeIndex)
+            this.stopRecord(encodeIndex)
           }, options.recordDuration)
         } else {
           console.log('Error, starting record: ' + error.red)
@@ -78,7 +76,7 @@ var startRecord = function (encodeIndex) {
     }
   }
 
-var stopRecord = function (stopIndex) {
+Monarch.prototype.stopRecord = function (stopIndex) {
     if (stopIndex < stopOptions.length && stopIndex > -1) {
       var url = secureurl.replace('<command>', stopOptions[stopIndex])
       console.log('Stop record with:', url)
@@ -97,86 +95,4 @@ var stopRecord = function (stopIndex) {
     }
   }
 
-var  testCall = function (optionIndex) {
-    startRecord(optionIndex)
-  }
-
-var runPermanentTest = function (optionsNumber) {
-    clearInterval(permanentTest)
-    permanentTest = setInterval(function () {
-      testCall(optionsNumber)
-    }, options.permanentTestInterval)
-  }
-
-var stopPermanenTest = function () {
-    clearInterval(permanentTest)
-  }
-
-var questions = [
-  {
-    type: 'list',
-    name: 'command',
-    message: 'What do you want to do?',
-    choices: [
-      'Get status for Matrox HD',
-      'Start recording',
-      'Stop recording',
-      'Run permanent test',
-      'Stop permanent test',
-      'Exit'
-    ]
-  }
-]
-
-var example = function () {
-  inquirer.prompt(questions, function (answers) {
-    if (answers.command === 'Exit') {
-      process.exit()
-    } else {
-      var optionIndex = 0
-      if (options.hdx) {
-        optionIndex = 3
-      } else {
-        optionIndex = 0
-      }
-      switch (answers.command) {
-        case 'Get status for Matrox HD':
-          console.log('Getting status...')
-          getStatus()
-          break
-        case 'Start recording':
-          console.log('Start recording for ' + options.recordDuration + ' Do not forget to stop it!')
-          startRecord(optionIndex)
-          break
-        case 'Stop recording':
-          console.log('Stop recording...')
-          stopRecord(optionIndex)
-          break
-        case 'Run permanent test':
-          console.log('Run permanent test based on every ' + options.permanentTestInterval + 'ms')
-          runPermanentTest(optionIndex)
-          break
-        case 'Stop permanent test':
-          console.log('Stoping test...')
-          stopPermanenTest()
-          break
-        default:
-          console.log('Wtf ???')
-      }
-      example()
-    }
-  })
-}
-//let's ask the user what he wants !
-//example()
-
-module.exports = {
-  setConfig: setConfig,
-  getStatus: getStatus,
-  startRecord: startRecord,
-  stopRecord: stopRecord,
-  testCall: testCall,
-  runPermanentTest: runPermanentTest,
-  stopPermanenTest: stopPermanenTest,
-  example: example
-};
+module.exports = Monarch;
