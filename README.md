@@ -31,7 +31,9 @@ options = {
 
 Configure a remote point for NFS, on Ubuntu `14.04` the good guide is here: https://help.ubuntu.com/14.04/serverguide/network-file-system.html
 
-4. And start with: `npm start`
+4. And use by example: 
+	`var monarch = require('./node_modules/node-monarch/monarch')
+	 monarch.ask()`
 
 Make sure you are pointing to the right IP of you Matrox Monarch HD or HDX
 
