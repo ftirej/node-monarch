@@ -42,7 +42,7 @@ Monarch.prototype.getStatus = function () {
     if (!error && response.statusCode == 200) {
       console.log('Status: ' + body.blue)
     } else {
-      if (error.code === 'ETIMEDOUT') {
+      if (error && error.code === 'ETIMEDOUT') {
         console.error("Can't reach host. Please verify your config or that the address is well configured.\n")
         process.exit()
       } else {
@@ -53,25 +53,27 @@ Monarch.prototype.getStatus = function () {
 }
 
 Monarch.prototype.startRecord = function (encodeIndex) {
+  var self = this
+
   if (encodeIndex === undefined && !this.options.hdx) {
     encodeIndex = 0
   } else if (encodeIndex === undefined && this.options.hdx) {
     encodeIndex = 3
   }
-  if (encodeIndex < encoderOptions.length && encodeIndex > -1) {
-    var url = this.secureurl.replace('<command>', encoderOptions[encodeIndex])
+  if (encodeIndex < this.encoderOptions.length && encodeIndex > -1) {
+    var url = this.secureurl.replace('<command>', this.encoderOptions[encodeIndex])
     console.log('Start record with:', url)
     request({
       url: url,
       timeout: this.options.timeout
     }, function (error, response, body) {
       if (!error && response.statusCode == 200) {
-        console.log('Recording: ' + body.green)
+        console.log('Recording: ' + body)
         setTimeout(function () {
-          this.stopRecord(encodeIndex)
-        }, this.options.recordDuration)
+          self.stopRecord(encodeIndex)
+        }, self.options.recordDuration)
       } else {
-        console.log('Error, starting record: ' + error.red)
+        console.log('Error, starting record: ' + error)
       }
     })
   } else {
@@ -85,8 +87,8 @@ Monarch.prototype.stopRecord = function (stopIndex) {
   } else if (stopIndex === undefined && this.options.hdx) {
     encodeIndex = 3
   }
-  if (stopIndex < stopOptions.length && stopIndex > -1) {
-    var url = this.secureurl.replace('<command>', stopOptions[stopIndex])
+  if (stopIndex < this.stopOptions.length && stopIndex > -1) {
+    var url = this.secureurl.replace('<command>', this.stopOptions[stopIndex])
     console.log('Stop record with:', url)
     request({
       url: url,
