@@ -1,18 +1,15 @@
 {
-  "name": "node-monarch",
-  "version": "1.0.0",
-  "description": "",
+  "name": "monarch-api",
+  "version": "0.0.1",
+  "description": "A wrapper around the Matrox Monarch HD / HDX recorder",
   "main": "monarch.js",
   "scripts": {
     "start": "node monarch.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Gabrielstuff",
-  "license": "ISC",
+  "author": "Soixante circuits",
+  "license": "MIT",
   "dependencies": {
-    "colors": "1.1.2",
-    "inquirer": "0.11.0",
-    "jsonschema": "^1.0.2",
     "request": "2.67.0"
   }
 }
