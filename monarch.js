@@ -40,7 +40,7 @@ Monarch.prototype.getStatus = function () {
     timeout: this.options.timeout
   }, function (error, response, body) {
     if (!error && response.statusCode == 200) {
-      console.log('Status: ' + body.blue)
+      console.log('Status: ' + body)
     } else {
       if (error && error.code === 'ETIMEDOUT') {
         console.error("Can't reach host. Please verify your config or that the address is well configured.\n")
@@ -95,9 +95,9 @@ Monarch.prototype.stopRecord = function (stopIndex) {
       timeout: this.options.timeout
     }, function (error, response, body) {
       if (!error && response.statusCode == 200) {
-        console.log('Stop recording: ' + body.green)
+        console.log('Stop recording: ' + body)
       } else {
-        console.log('Error, stoping record: ' + error.red)
+        console.log('Error, stoping record: ' + error)
       }
     })
   } else {
