@@ -83,9 +83,9 @@ Monarch.prototype.startRecord = function (encodeIndex) {
 
 Monarch.prototype.stopRecord = function (stopIndex) {
   if (stopIndex === undefined && !this.options.hdx) {
-    encodeIndex = 0
+    stopIndex = 0
   } else if (stopIndex === undefined && this.options.hdx) {
-    encodeIndex = 3
+    stopIndex = 3
   }
   if (stopIndex < this.stopOptions.length && stopIndex > -1) {
     var url = this.secureurl.replace('<command>', this.stopOptions[stopIndex])
