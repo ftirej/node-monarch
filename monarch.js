@@ -16,6 +16,7 @@ var Monarch = function (userConfig, options) {
   this.secureurl
 
   this.setConfig(userConfig)
+  this.stopRecordTimeout = null
 }
 
 Monarch.prototype.setConfig = function (userConfig) {
@@ -69,7 +70,8 @@ Monarch.prototype.startRecord = function (encodeIndex) {
     }, function (error, response, body) {
       if (!error && response.statusCode == 200) {
         console.log('Recording: ' + body)
-        setTimeout(function () {
+        clearTimeout(self.stopRecordTimeout)
+        self.stopRecordTimeout = setTimeout(function () {
           self.stopRecord(encodeIndex)
         }, self.options.recordDuration)
       } else {
@@ -82,6 +84,7 @@ Monarch.prototype.startRecord = function (encodeIndex) {
 }
 
 Monarch.prototype.stopRecord = function (stopIndex) {
+  clearTimeout(this.stopTimeout)
   if (stopIndex === undefined && !this.options.hdx) {
     stopIndex = 0
   } else if (stopIndex === undefined && this.options.hdx) {
