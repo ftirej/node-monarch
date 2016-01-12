@@ -84,7 +84,7 @@ Monarch.prototype.startRecord = function (encodeIndex) {
 }
 
 Monarch.prototype.stopRecord = function (stopIndex) {
-  clearTimeout(this.stopTimeout)
+  clearTimeout(this.stopRecordTimeout)
   if (stopIndex === undefined && !this.options.hdx) {
     stopIndex = 0
   } else if (stopIndex === undefined && this.options.hdx) {
