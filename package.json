@@ -1,6 +1,6 @@
 {
   "name": "monarch-api",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A wrapper around the Matrox Monarch HD / HDX recorder",
   "main": "monarch.js",
   "scripts": {
